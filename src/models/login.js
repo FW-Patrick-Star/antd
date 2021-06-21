@@ -1,68 +1,59 @@
-import { stringify } from 'querystring';
+/*
+ * @Author: your name
+ * @Date: 2021-06-16 09:17:20
+ * @LastEditTime: 2021-06-21 16:54:20
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \antd\src\models\login.js
+ */
 import { history } from 'umi';
-import { fakeAccountLogin } from '@/services/login';
-import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
+import { fakeAccountLogin, logout } from '@/services/login';
 import { message } from 'antd';
+
+
 const Model = {
   namespace: 'login',
   state: {
-    status: undefined,
   },
+
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      }); // Login successfully
+      
+      if (response.status === undefined) {
+        message.success('登录成功');
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        }); // Login successfully
 
-      if (response.status === 'ok') {
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        message.success('🎉 🎉 🎉  登录成功！');
-        let { redirect } = params;
-
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-
-            if (window.routerBase !== '/') {
-              redirect = redirect.replace(window.routerBase, '/');
-            }
-
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            window.location.href = '/';
-            return;
-          }
-        }
-
-        history.replace(redirect || '/');
+        history.replace('/');
       }
+      
     },
 
-    logout() {
-      const { redirect } = getPageQuery(); // Note: There may be security issues, please note
+    *logout(_, { call }) {
+      
+      const response = yield call(logout);
+      const key = 'updatable';
+      message.loading({ content: '退出中', key });
 
-      if (window.location.pathname !== '/user/login' && !redirect) {
-        history.replace({
-          pathname: '/user/login',
-          search: stringify({
-            redirect: window.location.href,
-          }),
-        });
+      if(response.status === undefined) {
+        
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('userInfo');
+        setTimeout(() => {
+          message.success({ content: '退出成功', key, duration: 2 });
+        }, 1000);
+        history.replace('/login');
       }
+
     },
   },
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
-      return { ...state, status: payload.status, type: payload.type };
+      localStorage.setItem("access_token", payload.access_token);
+      return { ...state };
     },
   },
 };

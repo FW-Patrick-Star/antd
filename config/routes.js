@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-06-16 09:17:20
+ * @LastEditTime: 2021-06-21 17:18:36
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \antd\config\routes.js
+ */
 export default [
   {
     path: '/',
@@ -24,13 +32,14 @@ export default [
             routes: [
               {
                 path: '/',
+                redirect: '/dashboard',
               },
-              /* {
-                path: '/todo',
-                name: 'todo',
-                icon: 'UnorderedListOutlined',
-                component: './Todo',
-              }, */
+              {
+                path: '/dashboard',
+                name: 'DashBoard',
+                icon: 'PieChartOutlined',
+                component: './DashBoard',
+              },
               
               {
                 component: './404',

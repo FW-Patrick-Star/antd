@@ -1,6 +1,7 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
 import { extend } from 'umi-request';
 import { message } from 'antd';
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -29,8 +30,8 @@ const errorHandler = async(error) => {
   
 
   if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
+    let errorText = codeMessage[response.status] || response.statusText;
+    const { status } = response;
 
     const result = await response.json();
 
@@ -70,7 +71,7 @@ const request = extend({
 // 请求头添加token
 request.interceptors.request.use((url, options) => {
 
-  const token = 'hello';
+  const token = localStorage.getItem('access_token') || '';
 
   const headers = {
     Authorization: `Bearer ${token}`,

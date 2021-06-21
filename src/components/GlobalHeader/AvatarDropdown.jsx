@@ -1,5 +1,5 @@
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Spin, Badge } from 'antd';
+import { Avatar, Menu, Spin } from 'antd';
 import React from 'react';
 import { history, connect } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
@@ -82,7 +82,6 @@ class AvatarDropdown extends React.Component {
         <span className={`${styles.action} ${styles.account}`}>
           <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
           <span className={`${styles.name} anticon`}>{currentUser.name}</span>
-          {/* <Badge count={todoNum} dot={true} */}/>
         </span>
       </HeaderDropdown>
     ) : (

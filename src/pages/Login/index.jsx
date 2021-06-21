@@ -1,17 +1,11 @@
 import {
-  AlipayCircleOutlined,
   LockOutlined,
-  MailOutlined,
-  MobileOutlined,
-  TaobaoCircleOutlined,
   UserOutlined,
-  WeiboCircleOutlined,
 } from '@ant-design/icons';
-import { Alert, Space, message, Tabs } from 'antd';
-import React, { useState } from 'react';
-import ProForm, { ProFormCaptcha, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
-import { useIntl, connect, FormattedMessage } from 'umi';
-import { getFakeCaptcha } from '@/services/login';
+import { Alert, Tabs } from 'antd';
+import React, { useEffect } from 'react';
+import ProForm, { ProFormText } from '@ant-design/pro-form';
+import { useIntl, connect, FormattedMessage, history } from 'umi';
 import styles from './index.less';
 
 const LoginMessage = ({ content }) => (
@@ -27,15 +21,21 @@ const LoginMessage = ({ content }) => (
 
 const Login = (props) => {
   const { userLogin = {}, submitting } = props;
-  const { status, type: loginType } = userLogin;
-  const [type, setType] = useState('account');
+  const { status } = userLogin;
   const intl = useIntl();
+
+  useEffect(() => {
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+      history.replace('/');
+    }    
+  }, [])
 
   const handleSubmit = (values) => {
     const { dispatch } = props;
     dispatch({
       type: 'login/login',
-      payload: { ...values, type },
+      payload: { ...values },
     });
   };
 
@@ -60,7 +60,7 @@ const Login = (props) => {
           return Promise.resolve();
         }}
       >
-        <Tabs activeKey={type} onChange={setType}>
+        <Tabs activeKey="account">
           <Tabs.TabPane
             key="account"
             tab={intl.formatMessage({
@@ -81,14 +81,14 @@ const Login = (props) => {
         
          
         <ProFormText
-          name="userName"
+          name="email"
           fieldProps={{
             size: 'large',
             prefix: <UserOutlined className={styles.prefixIcon} />,
           }}
           placeholder={intl.formatMessage({
             id: 'pages.login.username.placeholder',
-            defaultMessage: 'Username: admin or user',
+            defaultMessage: 'email: super@a.com',
           })}
           rules={[
             {
@@ -96,9 +96,13 @@ const Login = (props) => {
               message: (
                 <FormattedMessage
                   id="pages.login.username.required"
-                  defaultMessage="Please enter user name!"
+                  defaultMessage="Please enter user email!"
                 />
               ),
+            },
+            {
+              type: 'email',
+              message: "请输入正确邮箱格式",
             },
           ]}
         />
@@ -125,22 +129,7 @@ const Login = (props) => {
           ]}
         />
         
-        <div
-          style={{
-            marginBottom: 24,
-          }}
-        >
-          <ProFormCheckbox noStyle name="autoLogin">
-            <FormattedMessage id="pages.login.rememberMe" defaultMessage="Auto login" />
-          </ProFormCheckbox>
-          <a
-            style={{
-              float: 'right',
-            }}
-          >
-            <FormattedMessage id="pages.login.forgotPassword" defaultMessage="Forget password" />
-          </a>
-        </div>
+
       </ProForm>
     </div>
   );

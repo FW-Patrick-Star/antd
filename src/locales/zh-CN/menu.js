@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-06-16 09:17:20
+ * @LastEditTime: 2021-06-21 17:20:04
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \antd\src\locales\zh-CN\menu.js
+ */
 export default {
   'menu.welcome': '欢迎',
   'menu.more-blocks': '更多区块',
@@ -50,4 +58,5 @@ export default {
   'menu.editor.mind': '脑图编辑器',
   'menu.editor.koni': '拓扑编辑器',
   'menu.todo': '待办事项',
+  'menu.DashBoard': '首页统计',
 };
