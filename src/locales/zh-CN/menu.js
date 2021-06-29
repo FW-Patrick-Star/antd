@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-06-16 09:17:20
- * @LastEditTime: 2021-06-21 17:20:04
- * @LastEditors: your name
+ * @LastEditTime: 2021-06-24 09:20:04
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \antd\src\locales\zh-CN\menu.js
  */
@@ -59,4 +59,6 @@ export default {
   'menu.editor.koni': '拓扑编辑器',
   'menu.todo': '待办事项',
   'menu.DashBoard': '首页统计',
+  'menu.User': '用户列表',
+  'menu.Goods': '商品列表',
 };
